@@ -1,0 +1,24 @@
+{
+  "name": "blackjack",
+  "version": "1.0.0",
+  "description": "BlackJack game in Node.js with TypeScript and user interface",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "npm run build:server && npm run build:client",
+    "build:server": "tsc",
+    "build:client": "node scripts/build-client.js && tailwindcss -i ./src/client/app.css -o ./public/app.css --minify",
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "svelte": "^3.59.2"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5.0.0"
+  }
+}
