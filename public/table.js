@@ -24,9 +24,10 @@ createApp({
       return value;
     },
     suitSymbol(suit) {
-      return { Hearts: '♥', Diamonds: '♦', Clubs: '♣', Spades: '♠' }[suit] || suit;
+      return { Hearts: '♥', Diamonds: '♦', Clubs: '♣', Spades: '♠', Joker: '🃏' }[suit] || suit;
     },
     suitClass(suit) {
+      if (suit === 'Joker') return 'text-yellow-600';
       return suit === 'Hearts' || suit === 'Diamonds' ? 'text-red-600' : 'text-black';
     }
   },
@@ -39,6 +40,7 @@ createApp({
   template: `
     <div class="max-w-3xl mx-auto">
       <h1 class="text-2xl font-bold mb-4 text-center">Table</h1>
+      <p class="text-center mb-4">Cards remaining: {{ game.deck.length }}</p>
       <div class="flex flex-wrap justify-center">
         <div v-for="(player, i) in game.players" :key="i" class="bg-green-900 bg-opacity-50 text-white p-3 m-2 rounded">
           <h2 class="font-semibold mb-2 text-center">{{ player.name || 'Player ' + (i + 1) }}</h2>

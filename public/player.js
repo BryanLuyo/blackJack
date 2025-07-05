@@ -35,6 +35,13 @@ createApp({
       }
       return value;
     },
+    suitSymbol(suit) {
+      return { Hearts: '♥', Diamonds: '♦', Clubs: '♣', Spades: '♠', Joker: '🃏' }[suit] || suit;
+    },
+    suitClass(suit) {
+      if (suit === 'Joker') return 'text-yellow-600';
+      return suit === 'Hearts' || suit === 'Diamonds' ? 'text-red-600' : 'text-black';
+    },
     send(type, extra = {}) { ws.send(JSON.stringify({ type, id: this.id, ...extra })); },
     join() { this.send('setName', { name: this.name }); },
     hit() { this.send('hit'); },
@@ -59,8 +66,11 @@ createApp({
       </div>
       <div v-else>
         <p class="mb-2">Hello {{ player.name }}</p>
-        <div class="mb-2">Hand:
-          <span v-for="(c,i) in hand" :key="i" class="mr-2">{{ c.rank }} {{ c.suit }}</span>
+        <div class="mb-2 flex items-center">Hand:
+          <span v-for="(c,i) in hand" :key="i" :class="['card', suitClass(c.suit)]">
+            <span class="font-bold">{{ c.rank }}</span>
+            <span>{{ suitSymbol(c.suit) }}</span>
+          </span>
         </div>
         <div class="mb-2">Value: {{ value }}</div>
         <button @click="hit" :disabled="standing" class="px-2 py-1 bg-blue-500 text-white mr-2">Hit</button>

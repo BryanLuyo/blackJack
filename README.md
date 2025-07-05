@@ -2,7 +2,7 @@
 
 This project implements a simple multiplayer Blackjack game using **Vue 3** in the browser and a small Node.js backend with **WebSocket** support. All client files live in the `public` directory; no build step is required.
 
-Open `index.html` to choose the number of players (up to 8). When the game starts the server creates a deck and broadcasts the state to all connected clients. Each player opens their link (e.g. `player.html?id=0`), enters a name and can hit or stand. The table page (`table.html`) shows every player's hand and updates in real time via WebSocket messages.
+Open `index.html` to choose the number of players (up to 8). When the game starts the server creates a **54-card deck** (standard 52 cards plus two jokers) and broadcasts the state to all connected clients. Each player opens their link (e.g. `player.html?id=0`), enters a name and can hit or stand. The table page (`table.html`) shows every player's hand, the remaining deck size, and updates in real time via WebSocket messages.
 
 ## Requirements
 

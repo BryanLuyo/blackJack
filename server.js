@@ -18,6 +18,9 @@ function createDeck() {
   for (const s of suits) {
     for (const r of ranks) deck.push({ suit: s, rank: r });
   }
+  // add two jokers so the deck has 54 cards
+  deck.push({ suit: 'Joker', rank: 'Joker' });
+  deck.push({ suit: 'Joker', rank: 'Joker' });
   return deck;
 }
 
