@@ -16,7 +16,8 @@ function sendFile(res, filePath, contentType) {
 }
 
 createServer((req, res) => {
-  let filePath = join(publicDir, req.url === '/' ? 'index.html' : req.url);
+  const { pathname } = new URL(req.url, 'http://localhost');
+  const filePath = join(publicDir, pathname === '/' ? 'index.html' : pathname);
   if (!existsSync(filePath)) {
     res.writeHead(404);
     res.end('Not Found');
