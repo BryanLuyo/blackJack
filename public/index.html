@@ -19,10 +19,12 @@
       <div v-if="enlaces.length" class="mt-4">
         <h2 class="font-semibold">Enlaces de jugadores</h2>
         <ul class="list-disc ml-4">
-          <li v-for="(enlace, i) in enlaces" :key="i"><a :href="enlace" class="text-blue-300 underline">Jugador {{ i + 1 }}</a></li>
+          <li v-for="(enlace, i) in enlaces" :key="i">
+            <a :href="enlace" class="text-blue-300 underline">Jugador {{ i + 1 }}</a>
+          </li>
         </ul>
-      <a href="table.html" class="block mt-2 text-green-300 underline">Ver mesa</a>
-    </div>
+        <a :href="mesa" class="block mt-2 text-green-300 underline">Ver mesa</a>
+      </div>
   </div>
   <script src="game.js"></script>
   <script src="setup.js"></script>

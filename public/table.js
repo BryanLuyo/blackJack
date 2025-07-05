@@ -1,9 +1,15 @@
 const { createApp } = Vue;
+
+function obtenerTablero() {
+  const p = new URLSearchParams(location.search);
+  return parseInt(p.get('board') || '0', 10);
+}
+
 const ws = new WebSocket(`ws://${location.host}`);
 
 createApp({
   data() {
-    return { juego: { jugadores: [], iniciado: false }, ganador: '', animacion: true, barajando: false };
+    return { board: obtenerTablero(), juego: { jugadores: [], iniciado: false }, ganador: '', animacion: true, barajando: false };
   },
   methods: {
     valorMano(mano) {
@@ -31,11 +37,11 @@ createApp({
       return palo === 'Hearts' || palo === 'Diamonds' ? 'text-red-600' : 'text-black';
     },
     barajear() {
-      ws.send(JSON.stringify({ type: "shuffle" }));
+      ws.send(JSON.stringify({ type: "shuffle", board: this.board }));
       this.barajando = true;
       setTimeout(() => { this.barajando = false; }, 2000);
     },
-    comenzar() { ws.send(JSON.stringify({ type: 'begin' })); },
+    comenzar() { ws.send(JSON.stringify({ type: 'begin', board: this.board })); },
     finalizar() {
       const vals = this.juego.jugadores.map((j, i) => ({
         nombre: j.nombre || `Jugador ${i + 1}`,
@@ -54,7 +60,7 @@ createApp({
   mounted() {
     ws.addEventListener('message', ev => {
       const msg = JSON.parse(ev.data);
-      if (msg.type === 'state') this.juego = msg.juego;
+      if (msg.type === 'state') this.juego = msg.boards[this.board] || { jugadores: [], baraja: [], iniciado: false };
     });
     setTimeout(() => { this.animacion = false; }, 800);
   },

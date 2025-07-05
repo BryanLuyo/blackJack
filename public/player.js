@@ -5,11 +5,16 @@ function obtenerId() {
   return parseInt(parametros.get('id') || '0', 10);
 }
 
+function obtenerTablero() {
+  const parametros = new URLSearchParams(location.search);
+  return parseInt(parametros.get('board') || '0', 10);
+}
+
 const ws = new WebSocket(`ws://${location.host}`);
 
 createApp({
   data() {
-    return { id: obtenerId(), nombre: '', juego: { jugadores: [], iniciado: false } };
+    return { id: obtenerId(), board: obtenerTablero(), nombre: '', juego: { jugadores: [], iniciado: false } };
   },
   computed: {
     jugador() { return this.juego.jugadores[this.id] || { mano: [], plantado: false, nombre: '' }; },
@@ -43,7 +48,7 @@ createApp({
       if (palo === 'Joker') return 'text-yellow-600';
       return palo === 'Hearts' || palo === 'Diamonds' ? 'text-red-600' : 'text-black';
     },
-    enviar(tipo, extra = {}) { ws.send(JSON.stringify({ type: tipo, id: this.id, ...extra })); },
+    enviar(tipo, extra = {}) { ws.send(JSON.stringify({ type: tipo, board: this.board, id: this.id, ...extra })); },
     unirse() { this.enviar('setName', { name: this.nombre }); },
     pedir() { this.enviar('hit'); },
     plantarse() { this.enviar('stand'); }
@@ -52,7 +57,7 @@ createApp({
     ws.addEventListener('message', (ev) => {
       const msg = JSON.parse(ev.data);
       if (msg.type === 'state') {
-        this.juego = msg.juego;
+        this.juego = msg.boards[this.board] || { jugadores: [], iniciado: false, baraja: [] };
         if (this.valor >= 21 && !this.plantado) this.plantarse();
       }
     });
@@ -81,7 +86,7 @@ createApp({
         <button @click="pedir" :disabled="!iniciado || plantado || valor >= 21" class="px-2 py-1 bg-blue-500 text-white mr-2">Pedir</button>
         <button @click="plantarse" :disabled="!iniciado || plantado" class="px-2 py-1 bg-gray-500 text-white">Plantarse</button>
         <p v-if="plantado" class="mt-2">Plantado...</p>
-        <a href="table.html" class="block mt-4 text-green-300 underline text-center">Ir a la mesa</a>
+        <a :href="'table.html?board=' + board" class="block mt-4 text-green-300 underline text-center">Ir a la mesa</a>
       </div>
     </div>
   `

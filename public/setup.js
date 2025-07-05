@@ -1,14 +1,22 @@
 const { createApp } = Vue;
 const ws = new WebSocket(`ws://${location.host}`);
 
-createApp({
+const app = createApp({
   data() {
-    return { jugadores: 2, enlaces: [] };
+    return { jugadores: 2, enlaces: [], mesa: '', tablero: null };
   },
   methods: {
     iniciar() {
       ws.send(JSON.stringify({ type: 'start', players: this.jugadores }));
-      this.enlaces = Array.from({ length: this.jugadores }, (_, i) => `player.html?id=${i}`);
     }
   }
 }).mount('#app');
+
+ws.addEventListener('message', ev => {
+  const msg = JSON.parse(ev.data);
+  if (msg.type === 'boardCreated') {
+    app.tablero = msg.id;
+    app.enlaces = Array.from({ length: app.jugadores }, (_, i) => `player.html?board=${msg.id}&id=${i}`);
+    app.mesa = `table.html?board=${msg.id}`;
+  }
+});

@@ -7,8 +7,8 @@ import { WebSocketServer } from 'ws';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rutaPublica = path.join(__dirname, 'public');
 
-// estado del juego
-let juego = { baraja: [], jugadores: [], iniciado: false };
+// coleccion de tableros (mesas)
+let tableros = [];
 const clientes = new Set();
 
 function valorMano(mano) {
@@ -49,19 +49,22 @@ function barajar(baraja) {
   }
 }
 
-function iniciarJuego(cantidad) {
-  juego.baraja = crearBaraja();
-  barajar(juego.baraja);
-  juego.jugadores = Array.from({ length: cantidad }, () => ({ nombre: '', mano: [], plantado: false }));
-  juego.iniciado = false;
+function crearTablero(cantidad) {
+  const tablero = {
+    baraja: crearBaraja(),
+    jugadores: Array.from({ length: cantidad }, () => ({ nombre: '', mano: [], plantado: false })),
+    iniciado: false
+  };
+  barajar(tablero.baraja);
+  return tablero;
 }
 
-function tomarCarta() {
-  return juego.baraja.pop();
+function tomarCarta(tablero) {
+  return tablero.baraja.pop();
 }
 
 function difundir() {
-  const datos = JSON.stringify({ type: 'state', juego });
+  const datos = JSON.stringify({ type: 'state', boards: tableros });
   for (const ws of clientes) {
     if (ws.readyState === ws.OPEN) ws.send(datos);
   }
@@ -96,49 +99,60 @@ const servidorWebSocket = new WebSocketServer({ server: servidor });
 
 servidorWebSocket.on('connection', (ws) => {
   clientes.add(ws);
-  ws.send(JSON.stringify({ type: 'state', juego }));
+  ws.send(JSON.stringify({ type: 'state', boards: tableros }));
   ws.on('message', (data) => {
     let msg;
     try { msg = JSON.parse(data); } catch { return; }
-    procesarMensaje(msg);
+    procesarMensaje(ws, msg);
   });
   ws.on('close', () => clientes.delete(ws));
 });
 
-function procesarMensaje(msg) {
+function procesarMensaje(ws, msg) {
   switch (msg.type) {
     case 'start': {
       const cantidad = Math.max(1, Math.min(8, parseInt(msg.players, 10) || 1));
-      iniciarJuego(cantidad);
+      const id = tableros.length;
+      tableros[id] = crearTablero(cantidad);
+      ws.send(JSON.stringify({ type: 'boardCreated', id }));
       break;
     }
     case 'begin': {
-      juego.iniciado = true;
+      const t = tableros[msg.board];
+      if (t) t.iniciado = true;
       break;
     }
     case 'setName': {
-      const jugador = juego.jugadores[msg.id];
-      if (jugador) jugador.nombre = msg.name || '';
+      const t = tableros[msg.board];
+      if (t) {
+        const jugador = t.jugadores[msg.id];
+        if (jugador) jugador.nombre = msg.name || '';
+      }
       break;
     }
     case 'hit': {
-      if (!juego.iniciado) break;
-      const jugador = juego.jugadores[msg.id];
-      if (jugador && !jugador.plantado) {
-        const carta = tomarCarta();
-        if (carta) jugador.mano.push(carta);
-        if (valorMano(jugador.mano) >= 21) jugador.plantado = true;
+      const t = tableros[msg.board];
+      if (t && t.iniciado) {
+        const jugador = t.jugadores[msg.id];
+        if (jugador && !jugador.plantado) {
+          const carta = tomarCarta(t);
+          if (carta) jugador.mano.push(carta);
+          if (valorMano(jugador.mano) >= 21) jugador.plantado = true;
+        }
       }
       break;
     }
     case 'stand': {
-      if (!juego.iniciado) break;
-      const jugador = juego.jugadores[msg.id];
-      if (jugador) jugador.plantado = true;
+      const t = tableros[msg.board];
+      if (t && t.iniciado) {
+        const jugador = t.jugadores[msg.id];
+        if (jugador) jugador.plantado = true;
+      }
       break;
     }
     case 'shuffle': {
-      if (juego.baraja.length) barajar(juego.baraja);
+      const t = tableros[msg.board];
+      if (t && t.baraja.length) barajar(t.baraja);
       break;
     }
     default:
