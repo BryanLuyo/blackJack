@@ -1,5 +1,5 @@
-<script lang="ts">
-  import { initGame, saveGame } from './game';
+<script>
+  import { initGame, saveGame } from './game.js';
 
   let numPlayers = 1;
   let started = false;

@@ -7,7 +7,6 @@ On opening the game you choose how many players will participate. The page then 
 ## Requirements
 
 - Node.js (>= 18)
-- TypeScript (`tsc` command available)
 
 ## Building
 
@@ -17,7 +16,7 @@ Build the project (server and client):
 npm run build
 ```
 
-This generates the server code in `dist/` and compiles the Svelte client into `public/`.
+This compiles the Svelte client into `public/`.
 
 ## Running
 
@@ -37,4 +36,4 @@ For a quicker workflow you can run:
 npm run dev
 ```
 
-which starts the server directly from the TypeScript sources using `ts-node` (if installed).
+which simply runs the Node.js server without rebuilding.

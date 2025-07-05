@@ -1,6 +1,6 @@
-<script lang="ts">
+<script>
   import { onMount } from 'svelte';
-  import { loadGame, handValue } from './game';
+  import { loadGame, handValue } from './game.js';
 
   let game = loadGame();
 

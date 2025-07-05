@@ -1,22 +1,7 @@
-export interface Card {
-  suit: string;
-  rank: string;
-}
-
-export interface Player {
-  hand: Card[];
-  standing: boolean;
-}
-
-export interface GameState {
-  deck: Card[];
-  players: Player[];
-}
-
-export function createDeck(): Card[] {
+export function createDeck() {
   const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
   const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-  const deck: Card[] = [];
+  const deck = [];
   for (const suit of suits) {
     for (const rank of ranks) {
       deck.push({ suit, rank });
@@ -25,35 +10,35 @@ export function createDeck(): Card[] {
   return deck;
 }
 
-export function shuffle(deck: Card[]): void {
+export function shuffle(deck) {
   for (let i = deck.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
   }
 }
 
-export function initGame(numPlayers: number): GameState {
+export function initGame(numPlayers) {
   const deck = createDeck();
   shuffle(deck);
-  const players: Player[] = [];
+  const players = [];
   for (let i = 0; i < numPlayers; i++) {
     players.push({ hand: [], standing: false });
   }
   return { deck, players };
 }
 
-export function drawCard(game: GameState): Card | undefined {
+export function drawCard(game) {
   return game.deck.pop();
 }
 
-export function hit(game: GameState, index: number): void {
+export function hit(game, index) {
   const card = drawCard(game);
   if (card) {
     game.players[index].hand.push(card);
   }
 }
 
-export function handValue(hand: Card[]): number {
+export function handValue(hand) {
   let value = 0;
   let aces = 0;
   for (const card of hand) {
@@ -73,11 +58,11 @@ export function handValue(hand: Card[]): number {
   return value;
 }
 
-export function saveGame(game: GameState): void {
+export function saveGame(game) {
   localStorage.setItem('bjGame', JSON.stringify(game));
 }
 
-export function loadGame(): GameState | null {
+export function loadGame() {
   const raw = localStorage.getItem('bjGame');
-  return raw ? JSON.parse(raw) as GameState : null;
+  return raw ? JSON.parse(raw) : null;
 }

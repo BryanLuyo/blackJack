@@ -1,10 +1,10 @@
-import { createServer } from 'http';
-import { readFileSync, existsSync } from 'fs';
-import { join, extname } from 'path';
+const { createServer } = require('http');
+const { readFileSync, existsSync } = require('fs');
+const { join, extname } = require('path');
 
 const publicDir = join(__dirname, '..', 'public');
 
-function sendFile(res: any, filePath: string, contentType: string) {
+function sendFile(res, filePath, contentType) {
   try {
     const data = readFileSync(filePath);
     res.writeHead(200, { 'Content-Type': contentType });
@@ -16,14 +16,14 @@ function sendFile(res: any, filePath: string, contentType: string) {
 }
 
 createServer((req, res) => {
-  let filePath = join(publicDir, req.url === '/' ? 'index.html' : req.url!);
+  let filePath = join(publicDir, req.url === '/' ? 'index.html' : req.url);
   if (!existsSync(filePath)) {
     res.writeHead(404);
     res.end('Not Found');
     return;
   }
   const ext = extname(filePath);
-  const contentTypes: Record<string, string> = {
+  const contentTypes = {
     '.html': 'text/html',
     '.js': 'text/javascript',
     '.css': 'text/css'
