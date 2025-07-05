@@ -1,6 +1,8 @@
 # BlackJack Game
 
-This project implements a simple BlackJack game using **Node.js**, **Svelte**, and **Tailwind CSS**. The server serves a small web interface where you can play against a basic dealer AI.
+This project implements a small multi‑player BlackJack game using **Node.js**, **Svelte** and **Tailwind CSS**. The server only serves static files and game state is kept in the browser using `localStorage`.
+
+On opening the game you choose how many players will participate. The page then provides a link for each player to manage their hand and another link to view the table with every player's cards.
 
 ## Requirements
 
@@ -25,7 +27,7 @@ Start the server:
 npm start
 ```
 
-Then open `http://localhost:3000` in your browser to play.
+Navigate to `http://localhost:3000` and follow the instructions to start a game. After starting you will see links for each player (`player.html?id=0`, etc.) and another link to `table.html` to view the table.
 
 ## Development
 
