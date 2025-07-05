@@ -9,13 +9,14 @@ const ws = new WebSocket(`ws://${location.host}`);
 
 createApp({
   data() {
-    return { id: getId(), name: '', game: { players: [] } };
+    return { id: getId(), name: '', game: { players: [], started: false } };
   },
   computed: {
     player() { return this.game.players[this.id] || { hand: [], standing: false, name: '' }; },
     hand() { return this.player.hand; },
     standing() { return this.player.standing; },
-    value() { return this.handValue(this.hand); }
+    value() { return this.handValue(this.hand); },
+    started() { return this.game.started; }
   },
   methods: {
     handValue(hand) {
@@ -58,7 +59,7 @@ createApp({
   },
   template: `
     <div>
-      <h1 class="text-2xl font-bold mb-4">Jugador {{ id + 1 }}</h1>
+      <h1 class="text-2xl font-bold mb-4 text-center">Jugador {{ id + 1 }}</h1>
       <div v-if="!player.name">
         <form @submit.prevent="join" class="mb-4">
           <label class="block mb-2">Nombre:
@@ -76,10 +77,11 @@ createApp({
           </span>
         </div>
         <div class="mb-2">Valor: {{ value }}</div>
-        <button @click="hit" :disabled="standing || value >= 21" class="px-2 py-1 bg-blue-500 text-white mr-2">Pedir</button>
-        <button @click="stand" :disabled="standing" class="px-2 py-1 bg-gray-500 text-white">Plantarse</button>
+        <div v-if="!started" class="mb-2">Esperando al crupier...</div>
+        <button @click="hit" :disabled="!started || standing || value >= 21" class="px-2 py-1 bg-blue-500 text-white mr-2">Pedir</button>
+        <button @click="stand" :disabled="!started || standing" class="px-2 py-1 bg-gray-500 text-white">Plantarse</button>
         <p v-if="standing" class="mt-2">Plantado...</p>
-        <a href="table.html" class="block mt-4 text-green-700">Ir a la mesa</a>
+        <a href="table.html" class="block mt-4 text-green-300 underline text-center">Ir a la mesa</a>
       </div>
     </div>
   `

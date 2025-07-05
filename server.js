@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const base = path.join(__dirname, 'public');
 
 // game state
-let game = { deck: [], players: [] };
+let game = { deck: [], players: [], started: false };
 const clients = new Set();
 
 function handValue(hand) {
@@ -53,6 +53,7 @@ function initGame(count) {
   game.deck = createDeck();
   shuffle(game.deck);
   game.players = Array.from({ length: count }, () => ({ name: '', hand: [], standing: false }));
+  game.started = false;
 }
 
 function drawCard() {
@@ -111,12 +112,17 @@ function handleMessage(msg) {
       initGame(count);
       break;
     }
+    case 'begin': {
+      game.started = true;
+      break;
+    }
     case 'setName': {
       const p = game.players[msg.id];
       if (p) p.name = msg.name || '';
       break;
     }
     case 'hit': {
+      if (!game.started) break;
       const p = game.players[msg.id];
       if (p && !p.standing) {
         const card = drawCard();
@@ -126,6 +132,7 @@ function handleMessage(msg) {
       break;
     }
     case 'stand': {
+      if (!game.started) break;
       const p = game.players[msg.id];
       if (p) p.standing = true;
       break;

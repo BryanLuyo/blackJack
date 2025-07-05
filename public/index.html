@@ -7,8 +7,8 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="p-4">
-  <div id="app" class="max-w-md mx-auto">
+<body class="p-4 bg-green-800 min-h-screen text-white">
+  <div id="app" class="max-w-md mx-auto mt-6 bg-green-900 bg-opacity-50 p-4 rounded shadow">
     <h1 class="text-2xl font-bold mb-4">Iniciar partida</h1>
     <form @submit.prevent="start">
       <label class="block mb-2">Número de jugadores:
@@ -19,9 +19,9 @@
     <div v-if="links.length" class="mt-4">
       <h2 class="font-semibold">Enlaces de jugadores</h2>
       <ul class="list-disc ml-4">
-        <li v-for="(link, i) in links" :key="i"><a :href="link" class="text-blue-600">Jugador {{ i + 1 }}</a></li>
+        <li v-for="(link, i) in links" :key="i"><a :href="link" class="text-blue-300 underline">Jugador {{ i + 1 }}</a></li>
       </ul>
-      <a href="table.html" class="block mt-2 text-green-700">Ver mesa</a>
+      <a href="table.html" class="block mt-2 text-green-300 underline">Ver mesa</a>
     </div>
   </div>
   <script src="game.js"></script>
