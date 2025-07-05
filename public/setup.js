@@ -3,12 +3,12 @@ const ws = new WebSocket(`ws://${location.host}`);
 
 createApp({
   data() {
-    return { players: 2, links: [] };
+    return { jugadores: 2, enlaces: [] };
   },
   methods: {
-    start() {
-      ws.send(JSON.stringify({ type: 'start', players: this.players }));
-      this.links = Array.from({ length: this.players }, (_, i) => `player.html?id=${i}`);
+    iniciar() {
+      ws.send(JSON.stringify({ type: 'start', players: this.jugadores }));
+      this.enlaces = Array.from({ length: this.jugadores }, (_, i) => `player.html?id=${i}`);
     }
   }
 }).mount('#app');

@@ -5,73 +5,73 @@ import { fileURLToPath } from 'url';
 import { WebSocketServer } from 'ws';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const base = path.join(__dirname, 'public');
+const rutaPublica = path.join(__dirname, 'public');
 
-// game state
-let game = { deck: [], players: [], started: false };
-const clients = new Set();
+// estado del juego
+let juego = { baraja: [], jugadores: [], iniciado: false };
+const clientes = new Set();
 
-function handValue(hand) {
-  let value = 0;
-  let aces = 0;
-  for (const card of hand) {
-    if (card.rank === 'A') {
-      value += 11; aces++;
-    } else if (['K', 'Q', 'J'].includes(card.rank)) {
-      value += 10;
+function valorMano(mano) {
+  let valor = 0;
+  let ases = 0;
+  for (const carta of mano) {
+    if (carta.rank === 'A') {
+      valor += 11; ases++;
+    } else if (['K', 'Q', 'J'].includes(carta.rank)) {
+      valor += 10;
     } else {
-      value += parseInt(card.rank, 10);
+      valor += parseInt(carta.rank, 10);
     }
   }
-  while (value > 21 && aces > 0) {
-    value -= 10; aces--;
+  while (valor > 21 && ases > 0) {
+    valor -= 10; ases--;
   }
-  return value;
+  return valor;
 }
 
-function createDeck() {
-  const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-  const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
-  const deck = [];
-  for (const s of suits) {
-    for (const r of ranks) deck.push({ suit: s, rank: r });
+function crearBaraja() {
+  const palos = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
+  const rangos = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+  const baraja = [];
+  for (const p of palos) {
+    for (const r of rangos) baraja.push({ suit: p, rank: r });
   }
-  // add two jokers so the deck has 54 cards
-  deck.push({ suit: 'Joker', rank: 'Joker' });
-  deck.push({ suit: 'Joker', rank: 'Joker' });
-  return deck;
+  // añadir dos comodines para tener 54 cartas
+  baraja.push({ suit: 'Joker', rank: 'Joker' });
+  baraja.push({ suit: 'Joker', rank: 'Joker' });
+  return baraja;
 }
 
-function shuffle(deck) {
-  for (let i = deck.length - 1; i > 0; i--) {
+function barajar(baraja) {
+  for (let i = baraja.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [deck[i], deck[j]] = [deck[j], deck[i]];
+    [baraja[i], baraja[j]] = [baraja[j], baraja[i]];
   }
 }
 
-function initGame(count) {
-  game.deck = createDeck();
-  shuffle(game.deck);
-  game.players = Array.from({ length: count }, () => ({ name: '', hand: [], standing: false }));
-  game.started = false;
+function iniciarJuego(cantidad) {
+  juego.baraja = crearBaraja();
+  barajar(juego.baraja);
+  juego.jugadores = Array.from({ length: cantidad }, () => ({ nombre: '', mano: [], plantado: false }));
+  juego.iniciado = false;
 }
 
-function drawCard() {
-  return game.deck.pop();
+function tomarCarta() {
+  return juego.baraja.pop();
 }
 
-function broadcast() {
-  const data = JSON.stringify({ type: 'state', game });
-  for (const ws of clients) {
-    if (ws.readyState === ws.OPEN) ws.send(data);
+function difundir() {
+  const datos = JSON.stringify({ type: 'state', juego });
+  for (const ws of clientes) {
+    if (ws.readyState === ws.OPEN) ws.send(datos);
   }
 }
 
-const server = http.createServer((req, res) => {
+const servidor = http.createServer((req, res) => {
   const urlPath = new URL(req.url, `http://${req.headers.host}`).pathname;
   const fileName = urlPath === '/' ? 'index.html' : urlPath.replace(/^\/+/, '');
-  const filePath = path.join(base, fileName.split('?')[0]);
-  if (!filePath.startsWith(base)) {
+  const filePath = path.join(rutaPublica, fileName.split('?')[0]);
+  if (!filePath.startsWith(rutaPublica)) {
     res.writeHead(400);
     return res.end('Bad request');
   }
@@ -92,58 +92,58 @@ const server = http.createServer((req, res) => {
   });
 });
 
-const wss = new WebSocketServer({ server });
+const servidorWebSocket = new WebSocketServer({ server: servidor });
 
-wss.on('connection', (ws) => {
-  clients.add(ws);
-  ws.send(JSON.stringify({ type: 'state', game }));
+servidorWebSocket.on('connection', (ws) => {
+  clientes.add(ws);
+  ws.send(JSON.stringify({ type: 'state', juego }));
   ws.on('message', (data) => {
     let msg;
     try { msg = JSON.parse(data); } catch { return; }
-    handleMessage(msg);
+    procesarMensaje(msg);
   });
-  ws.on('close', () => clients.delete(ws));
+  ws.on('close', () => clientes.delete(ws));
 });
 
-function handleMessage(msg) {
+function procesarMensaje(msg) {
   switch (msg.type) {
     case 'start': {
-      const count = Math.max(1, Math.min(8, parseInt(msg.players, 10) || 1));
-      initGame(count);
+      const cantidad = Math.max(1, Math.min(8, parseInt(msg.players, 10) || 1));
+      iniciarJuego(cantidad);
       break;
     }
     case 'begin': {
-      game.started = true;
+      juego.iniciado = true;
       break;
     }
     case 'setName': {
-      const p = game.players[msg.id];
-      if (p) p.name = msg.name || '';
+      const jugador = juego.jugadores[msg.id];
+      if (jugador) jugador.nombre = msg.name || '';
       break;
     }
     case 'hit': {
-      if (!game.started) break;
-      const p = game.players[msg.id];
-      if (p && !p.standing) {
-        const card = drawCard();
-        if (card) p.hand.push(card);
-        if (handValue(p.hand) >= 21) p.standing = true;
+      if (!juego.iniciado) break;
+      const jugador = juego.jugadores[msg.id];
+      if (jugador && !jugador.plantado) {
+        const carta = tomarCarta();
+        if (carta) jugador.mano.push(carta);
+        if (valorMano(jugador.mano) >= 21) jugador.plantado = true;
       }
       break;
     }
     case 'stand': {
-      if (!game.started) break;
-      const p = game.players[msg.id];
-      if (p) p.standing = true;
+      if (!juego.iniciado) break;
+      const jugador = juego.jugadores[msg.id];
+      if (jugador) jugador.plantado = true;
       break;
     }
     default:
       return;
   }
-  broadcast();
+  difundir();
 }
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+const PUERTO = process.env.PORT || 3000;
+servidor.listen(PUERTO, () => {
+  console.log(`Server running at http://localhost:${PUERTO}`);
 });

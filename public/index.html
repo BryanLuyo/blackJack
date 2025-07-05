@@ -10,17 +10,17 @@
 <body class="p-4 bg-green-800 min-h-screen text-white">
   <div id="app" class="max-w-md mx-auto mt-6 bg-green-900 bg-opacity-50 p-4 rounded shadow">
     <h1 class="text-2xl font-bold mb-4">Iniciar partida</h1>
-    <form @submit.prevent="start">
-      <label class="block mb-2">Número de jugadores:
-        <input type="number" v-model.number="players" min="1" max="8" class="border p-1 bg-white text-black">
-      </label>
-      <button class="mt-2 px-3 py-1 bg-blue-500 text-white">Iniciar</button>
-    </form>
-    <div v-if="links.length" class="mt-4">
-      <h2 class="font-semibold">Enlaces de jugadores</h2>
-      <ul class="list-disc ml-4">
-        <li v-for="(link, i) in links" :key="i"><a :href="link" class="text-blue-300 underline">Jugador {{ i + 1 }}</a></li>
-      </ul>
+    <form @submit.prevent="iniciar">
+        <label class="block mb-2">Número de jugadores:
+          <input type="number" v-model.number="jugadores" min="1" max="8" class="border p-1 bg-white text-black">
+        </label>
+        <button class="mt-2 px-3 py-1 bg-blue-500 text-white">Iniciar</button>
+      </form>
+      <div v-if="enlaces.length" class="mt-4">
+        <h2 class="font-semibold">Enlaces de jugadores</h2>
+        <ul class="list-disc ml-4">
+          <li v-for="(enlace, i) in enlaces" :key="i"><a :href="enlace" class="text-blue-300 underline">Jugador {{ i + 1 }}</a></li>
+        </ul>
       <a href="table.html" class="block mt-2 text-green-300 underline">Ver mesa</a>
     </div>
   </div>

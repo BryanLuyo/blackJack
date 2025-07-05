@@ -1,20 +1,20 @@
 (() => {
-  function handValue(hand) {
-    let value = 0;
-    let aces = 0;
-    for (const card of hand) {
-      if (card.rank === 'A') {
-        value += 11; aces++;
-      } else if (['K','Q','J'].includes(card.rank)) {
-        value += 10;
+  function valorMano(mano) {
+    let valor = 0;
+    let ases = 0;
+    for (const carta of mano) {
+      if (carta.rank === 'A') {
+        valor += 11; ases++;
+      } else if (['K','Q','J'].includes(carta.rank)) {
+        valor += 10;
       } else {
-        value += parseInt(card.rank, 10);
+        valor += parseInt(carta.rank, 10);
       }
     }
-    while (value > 21 && aces > 0) {
-      value -= 10; aces--;
+    while (valor > 21 && ases > 0) {
+      valor -= 10; ases--;
     }
-    return value;
+    return valor;
   }
-  window.Game = { handValue };
+  window.Game = { valorMano };
 })();
