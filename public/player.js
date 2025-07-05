@@ -15,9 +15,26 @@ createApp({
     player() { return this.game.players[this.id] || { hand: [], standing: false, name: '' }; },
     hand() { return this.player.hand; },
     standing() { return this.player.standing; },
-    value() { return Game.handValue(this.hand); }
+    value() { return this.handValue(this.hand); }
   },
   methods: {
+    handValue(hand) {
+      let value = 0;
+      let aces = 0;
+      for (const card of hand) {
+        if (card.rank === 'A') {
+          value += 11; aces++;
+        } else if (['K','Q','J'].includes(card.rank)) {
+          value += 10;
+        } else {
+          value += parseInt(card.rank, 10);
+        }
+      }
+      while (value > 21 && aces > 0) {
+        value -= 10; aces--;
+      }
+      return value;
+    },
     send(type, extra = {}) { ws.send(JSON.stringify({ type, id: this.id, ...extra })); },
     join() { this.send('setName', { name: this.name }); },
     hit() { this.send('hit'); },
