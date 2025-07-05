@@ -1,19 +1,19 @@
-# Blackjack Game (Vue.js)
+# Juego de Blackjack (Vue.js)
 
-This project implements a simple multiplayer Blackjack game using **Vue 3** in the browser and a small Node.js backend with **WebSocket** support. All client files live in the `public` directory; no build step is required.
+Este proyecto implementa un sencillo juego de Blackjack multijugador usando **Vue 3** en el navegador y un pequeño servidor Node.js con soporte **WebSocket**. Todos los archivos del cliente están en el directorio `public`; no se requiere un paso de compilación.
 
-Open `index.html` to choose the number of players (up to 8). When the game starts the server creates a **54-card deck** (standard 52 cards plus two jokers) and broadcasts the state to all connected clients. Each player opens their link (e.g. `player.html?id=0`), enters a name and can hit or stand. The table page (`table.html`) shows every player's hand, the remaining deck size, and updates in real time via WebSocket messages.
+Abre `index.html` para elegir el número de jugadores (hasta 8). Cuando inicia la partida el servidor crea una baraja de **54 cartas** (52 normales más dos comodines) y envía el estado a los clientes conectados. Cada jugador abre su enlace (por ejemplo `player.html?id=0`), ingresa su nombre y puede pedir carta o plantarse. La página de la mesa (`table.html`) muestra la mano de cada jugador, las cartas restantes y se actualiza en tiempo real mediante WebSocket.
 
-## Requirements
+## Requisitos
 
 - Node.js (>= 18)
 
-## Scripts
+## Comandos
 
 ```bash
-npm install   # install dependencies (only "ws" for WebSocket)
-npm run build # no-op build step
-npm start     # start the Node.js server
+npm install   # instalar dependencias (solo "ws" para WebSocket)
+npm run build # paso de compilación vacío
+npm start     # iniciar el servidor Node.js
 ```
 
-Once the server is running, navigate to `http://localhost:3000` to begin.
+Con el servidor en marcha, abre `http://localhost:3000` en tu navegador.

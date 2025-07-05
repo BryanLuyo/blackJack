@@ -39,22 +39,22 @@ createApp({
   },
   template: `
     <div class="max-w-3xl mx-auto">
-      <h1 class="text-2xl font-bold mb-4 text-center">Table</h1>
-      <p class="text-center mb-4">Cards remaining: {{ game.deck.length }}</p>
+      <h1 class="text-2xl font-bold mb-4 text-center">Mesa</h1>
+      <p class="text-center mb-4">Cartas restantes: {{ game.deck.length }}</p>
       <div class="flex flex-wrap justify-center">
         <div v-for="(player, i) in game.players" :key="i" class="bg-green-900 bg-opacity-50 text-white p-3 m-2 rounded">
-          <h2 class="font-semibold mb-2 text-center">{{ player.name || 'Player ' + (i + 1) }}</h2>
+          <h2 class="font-semibold mb-2 text-center">{{ player.name || 'Jugador ' + (i + 1) }}</h2>
           <div class="flex mb-1">
             <span v-for="(c,j) in player.hand" :key="j" :class="['card', suitClass(c.suit)]">
               <span class="font-bold">{{ c.rank }}</span>
               <span>{{ suitSymbol(c.suit) }}</span>
             </span>
           </div>
-          <div>Value: {{ handValue(player.hand) }}</div>
-          <div v-if="player.standing">Standing</div>
+          <div>Valor: {{ handValue(player.hand) }}</div>
+          <div v-if="player.standing">Plantado</div>
         </div>
       </div>
-      <a href="index.html" class="text-blue-200 underline block mt-4 text-center">Reset Game</a>
+      <a href="index.html" class="text-blue-200 underline block mt-4 text-center">Reiniciar partida</a>
     </div>
   `
 }).mount('#app');
