@@ -1,8 +1,7 @@
 module.exports = {
-  content: ['./src/client/**/*.{svelte,js}'],
+  content: ['./src/client/**/*.js', './public/**/*.html'],
   theme: {
     extend: {}
   },
   plugins: []
 };
-

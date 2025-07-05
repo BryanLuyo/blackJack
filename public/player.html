@@ -5,8 +5,16 @@
   <title>Jugador</title>
   <link rel="stylesheet" href="app.css">
 </head>
-<body class="bg-green-100 font-sans">
-  <div id="app"></div>
-  <script type="module" src="Player.js"></script>
+<body class="bg-green-100 font-sans p-4 space-y-2">
+  <h1 id="player-title" class="text-xl font-bold">Jugador</h1>
+  <div id="hand"></div>
+  <div class="space-x-2">
+    <button id="hit" class="px-2 py-1 bg-blue-500 text-white rounded">Hit</button>
+    <button id="stand" class="px-2 py-1 bg-red-500 text-white rounded">Stand</button>
+  </div>
+  <div class="mt-2">
+    <a href="table.html" class="text-blue-600 underline">Ir a la mesa</a>
+  </div>
+  <script type="module" src="player.js"></script>
 </body>
 </html>

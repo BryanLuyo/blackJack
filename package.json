@@ -1,11 +1,10 @@
 {
   "name": "blackjack",
   "version": "1.0.0",
-  "description": "BlackJack game in Node.js with a Svelte front-end",
+  "description": "BlackJack game in Node.js with plain HTML and Tailwind",
   "main": "src/server.js",
   "scripts": {
-    "build": "npm run build:client",
-    "build:client": "node scripts/build-client.js && tailwindcss -i ./src/client/app.css -o ./public/app.css --minify",
+    "build": "node scripts/build-client.js",
     "start": "node src/server.js",
     "dev": "node src/server.js"
   },
@@ -13,9 +12,7 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "dependencies": {
-    "svelte": "^3.59.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "tailwindcss": "^3.3.0"
   }

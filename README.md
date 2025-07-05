@@ -1,8 +1,8 @@
 # BlackJack Game
 
-This project implements a small multi‑player BlackJack game using **Node.js**, **Svelte** and **Tailwind CSS**. The server only serves static files and game state is kept in the browser using `localStorage`.
+This is a small multi-player BlackJack game built with **Node.js** and plain HTML. Styles are provided by **Tailwind CSS**. The server simply hosts static files and all game state lives in the browser using `localStorage`.
 
-On opening the game you choose how many players will participate. The page then provides a link for each player to manage their hand and another link to view the table with every player's cards.
+When opening the game you set the number of players. The page then shows a link for each player page where they can draw cards, and a table page that displays every player's hand.
 
 ## Requirements
 
@@ -10,13 +10,13 @@ On opening the game you choose how many players will participate. The page then 
 
 ## Building
 
-Build the project (server and client):
+Compile the client assets:
 
 ```bash
 npm run build
 ```
 
-This compiles the Svelte client into `public/`.
+This copies the JavaScript files into `public/` and generates `app.css` using Tailwind.
 
 ## Running
 
@@ -26,7 +26,7 @@ Start the server:
 npm start
 ```
 
-Navigate to `http://localhost:3000` and follow the instructions to start a game. After starting you will see links for each player (`player.html?id=0`, etc.) and another link to `table.html` to view the table.
+Navigate to `http://localhost:3000` to configure and start a game. You will see links to each player page (`player.html?id=0`, etc.) and a link to `table.html` to view the table.
 
 ## Development
 
@@ -36,4 +36,4 @@ For a quicker workflow you can run:
 npm run dev
 ```
 
-which simply runs the Node.js server without rebuilding.
+which starts the Node.js server without rebuilding.
