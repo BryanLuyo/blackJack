@@ -11,7 +11,7 @@
     <h1 class="text-2xl font-bold mb-4">Start Game</h1>
     <form @submit.prevent="start">
       <label class="block mb-2">Number of players:
-        <input type="number" v-model.number="players" min="1" class="border p-1">
+        <input type="number" v-model.number="players" min="1" max="8" class="border p-1">
       </label>
       <button class="mt-2 px-3 py-1 bg-blue-500 text-white">Start</button>
     </form>
