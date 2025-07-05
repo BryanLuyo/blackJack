@@ -1,8 +1,8 @@
-# BlackJack Game
+# Blackjack Game (Vue.js)
 
-This project is built with **SvelteKit** and **Tailwind CSS**. It targets **Svelte 4**, so you shouldn't see peer dependency conflicts when installing. The entire game runs in the browser and the Node.js server is provided by SvelteKit.
+This project implements a simple multiplayer Blackjack game using **Vue 3** in the browser and a small Node.js server. No build step is required; all pages are served from the `public` directory.
 
-The index page lets you choose the number of players and generates links for each player and the table view. Game state is kept in `localStorage`.
+Open `index.html` to choose the number of players. The app stores the game state in `localStorage` and generates links for each player (e.g. `player.html?id=0`) as well as a table view (`table.html`) that shows every hand.
 
 ## Requirements
 
@@ -11,15 +11,9 @@ The index page lets you choose the number of players and generates links for eac
 ## Scripts
 
 ```bash
-npm install       # install dependencies
-npm run dev       # start SvelteKit in development mode
-npm run build     # build the app for production
-npm start         # run the built server
+npm install   # nothing to install but keeps workflow consistent
+npm run build # no-op build step
+npm start     # start the static file server
 ```
 
-If installation still fails with peer dependency errors, you can run:
-```bash
-npm install --legacy-peer-deps
-```
-
-Open `http://localhost:3000` to start a new game.
+Once the server is running, navigate to `http://localhost:3000` to begin.

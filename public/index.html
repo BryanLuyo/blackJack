@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BlackJack Setup</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-4">
+  <div id="app">
+    <h1 class="text-2xl font-bold mb-4">Start Game</h1>
+    <form @submit.prevent="start">
+      <label class="block mb-2">Number of players:
+        <input type="number" v-model.number="players" min="1" class="border p-1">
+      </label>
+      <button class="mt-2 px-3 py-1 bg-blue-500 text-white">Start</button>
+    </form>
+    <div v-if="links.length" class="mt-4">
+      <h2 class="font-semibold">Player links</h2>
+      <ul class="list-disc ml-4">
+        <li v-for="(link, i) in links" :key="i"><a :href="link" class="text-blue-600">Player {{ i + 1 }}</a></li>
+      </ul>
+      <a href="table.html" class="block mt-2 text-green-700">View Table</a>
+    </div>
+  </div>
+  <script src="game.js"></script>
+  <script src="setup.js"></script>
+</body>
+</html>
