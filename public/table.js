@@ -30,6 +30,11 @@ createApp({
       if (palo === 'Joker') return 'text-yellow-600';
       return palo === 'Hearts' || palo === 'Diamonds' ? 'text-red-600' : 'text-black';
     },
+    barajear() {
+      ws.send(JSON.stringify({ type: 'shuffle' }));
+      this.animacion = true;
+      setTimeout(() => { this.animacion = false; }, 800);
+    },
     comenzar() { ws.send(JSON.stringify({ type: 'begin' })); },
     finalizar() {
       const vals = this.juego.jugadores.map((j, i) => ({
@@ -55,10 +60,11 @@ createApp({
   },
   template: `
     <div class="max-w-3xl mx-auto text-center">
-      <div v-if="animacion" class="deck"></div>
+      <div class="deck" :class="{ bajar: animacion }"></div>
       <h1 class="text-2xl font-bold mb-4">Mesa</h1>
       <p class="mb-4">Cartas restantes: {{ juego.baraja.length }}</p>
-      <button v-if="!juego.iniciado" @click="comenzar" class="px-3 py-1 mb-4 bg-blue-600 text-white rounded">Comenzar juego</button>
+      <button @click="barajear" class="px-3 py-1 mb-4 bg-yellow-600 text-white rounded">Barajear</button>
+      <button v-if="!juego.iniciado" @click="comenzar" class="px-3 py-1 mb-4 bg-blue-600 text-white rounded ml-2">Comenzar juego</button>
       <button v-if="juego.iniciado" @click="finalizar" class="px-3 py-1 mb-4 bg-red-600 text-white rounded ml-2">Finalizar juego</button>
       <div class="flex flex-wrap justify-center">
         <div v-for="(jugador, i) in juego.jugadores" :key="i" class="bg-green-900 bg-opacity-50 text-white p-3 m-2 rounded">

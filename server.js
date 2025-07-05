@@ -137,6 +137,10 @@ function procesarMensaje(msg) {
       if (jugador) jugador.plantado = true;
       break;
     }
+    case 'shuffle': {
+      if (juego.baraja.length) barajar(juego.baraja);
+      break;
+    }
     default:
       return;
   }
