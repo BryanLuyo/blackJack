@@ -3,9 +3,10 @@ const ws = new WebSocket(`ws://${location.host}`);
 
 const app = createApp({
   data() {
-    return { jugadores: 2, enlaces: [], mesa: '', tablero: null };
+    return { jugadores: 2, enlaces: [], mesa: '', tablero: null, mostrar: false };
   },
   methods: {
+    mostrarFormulario() { this.mostrar = true; },
     iniciar() {
       ws.send(JSON.stringify({ type: 'start', players: this.jugadores }));
     }
