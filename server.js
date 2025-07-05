@@ -11,6 +11,24 @@ const base = path.join(__dirname, 'public');
 let game = { deck: [], players: [] };
 const clients = new Set();
 
+function handValue(hand) {
+  let value = 0;
+  let aces = 0;
+  for (const card of hand) {
+    if (card.rank === 'A') {
+      value += 11; aces++;
+    } else if (['K', 'Q', 'J'].includes(card.rank)) {
+      value += 10;
+    } else {
+      value += parseInt(card.rank, 10);
+    }
+  }
+  while (value > 21 && aces > 0) {
+    value -= 10; aces--;
+  }
+  return value;
+}
+
 function createDeck() {
   const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
   const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
@@ -103,6 +121,7 @@ function handleMessage(msg) {
       if (p && !p.standing) {
         const card = drawCard();
         if (card) p.hand.push(card);
+        if (handValue(p.hand) >= 21) p.standing = true;
       }
       break;
     }

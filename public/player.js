@@ -50,7 +50,10 @@ createApp({
   mounted() {
     ws.addEventListener('message', (ev) => {
       const msg = JSON.parse(ev.data);
-      if (msg.type === 'state') this.game = msg.game;
+      if (msg.type === 'state') {
+        this.game = msg.game;
+        if (this.value >= 21 && !this.standing) this.stand();
+      }
     });
   },
   template: `
@@ -73,7 +76,7 @@ createApp({
           </span>
         </div>
         <div class="mb-2">Valor: {{ value }}</div>
-        <button @click="hit" :disabled="standing" class="px-2 py-1 bg-blue-500 text-white mr-2">Pedir</button>
+        <button @click="hit" :disabled="standing || value >= 21" class="px-2 py-1 bg-blue-500 text-white mr-2">Pedir</button>
         <button @click="stand" :disabled="standing" class="px-2 py-1 bg-gray-500 text-white">Plantarse</button>
         <p v-if="standing" class="mt-2">Plantado...</p>
         <a href="table.html" class="block mt-4 text-green-700">Ir a la mesa</a>
