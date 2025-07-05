@@ -3,7 +3,7 @@ const ws = new WebSocket(`ws://${location.host}`);
 
 createApp({
   data() {
-    return { juego: { jugadores: [], iniciado: false }, ganador: '' };
+    return { juego: { jugadores: [], iniciado: false }, ganador: '', animacion: true };
   },
   methods: {
     valorMano(mano) {
@@ -51,9 +51,11 @@ createApp({
       const msg = JSON.parse(ev.data);
       if (msg.type === 'state') this.juego = msg.juego;
     });
+    setTimeout(() => { this.animacion = false; }, 800);
   },
   template: `
     <div class="max-w-3xl mx-auto text-center">
+      <div v-if="animacion" class="deck"></div>
       <h1 class="text-2xl font-bold mb-4">Mesa</h1>
       <p class="mb-4">Cartas restantes: {{ juego.baraja.length }}</p>
       <button v-if="!juego.iniciado" @click="comenzar" class="px-3 py-1 mb-4 bg-blue-600 text-white rounded">Comenzar juego</button>
