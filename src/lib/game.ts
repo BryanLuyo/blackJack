@@ -1,7 +1,22 @@
-export function createDeck() {
+export interface Card {
+  suit: string;
+  rank: string;
+}
+
+export interface Player {
+  hand: Card[];
+  standing: boolean;
+}
+
+export interface Game {
+  deck: Card[];
+  players: Player[];
+}
+
+export function createDeck(): Card[] {
   const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
   const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-  const deck = [];
+  const deck: Card[] = [];
   for (const suit of suits) {
     for (const rank of ranks) {
       deck.push({ suit, rank });
@@ -10,35 +25,35 @@ export function createDeck() {
   return deck;
 }
 
-export function shuffle(deck) {
+export function shuffle(deck: Card[]): void {
   for (let i = deck.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [deck[i], deck[j]] = [deck[j], deck[i]];
   }
 }
 
-export function initGame(numPlayers) {
+export function initGame(numPlayers: number): Game {
   const deck = createDeck();
   shuffle(deck);
-  const players = [];
+  const players: Player[] = [];
   for (let i = 0; i < numPlayers; i++) {
     players.push({ hand: [], standing: false });
   }
   return { deck, players };
 }
 
-export function drawCard(game) {
+export function drawCard(game: Game): Card | undefined {
   return game.deck.pop();
 }
 
-export function hit(game, index) {
+export function hit(game: Game, index: number): void {
   const card = drawCard(game);
   if (card) {
     game.players[index].hand.push(card);
   }
 }
 
-export function handValue(hand) {
+export function handValue(hand: Card[]): number {
   let value = 0;
   let aces = 0;
   for (const card of hand) {
@@ -58,11 +73,11 @@ export function handValue(hand) {
   return value;
 }
 
-export function saveGame(game) {
+export function saveGame(game: Game): void {
   localStorage.setItem('bjGame', JSON.stringify(game));
 }
 
-export function loadGame() {
+export function loadGame(): Game | null {
   const raw = localStorage.getItem('bjGame');
-  return raw ? JSON.parse(raw) : null;
+  return raw ? (JSON.parse(raw) as Game) : null;
 }
