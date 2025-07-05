@@ -3,7 +3,7 @@ const ws = new WebSocket(`ws://${location.host}`);
 
 createApp({
   data() {
-    return { juego: { jugadores: [], iniciado: false }, ganador: '', animacion: true };
+    return { juego: { jugadores: [], iniciado: false }, ganador: '', animacion: true, barajando: false };
   },
   methods: {
     valorMano(mano) {
@@ -31,9 +31,9 @@ createApp({
       return palo === 'Hearts' || palo === 'Diamonds' ? 'text-red-600' : 'text-black';
     },
     barajear() {
-      ws.send(JSON.stringify({ type: 'shuffle' }));
-      this.animacion = true;
-      setTimeout(() => { this.animacion = false; }, 800);
+      ws.send(JSON.stringify({ type: "shuffle" }));
+      this.barajando = true;
+      setTimeout(() => { this.barajando = false; }, 2000);
     },
     comenzar() { ws.send(JSON.stringify({ type: 'begin' })); },
     finalizar() {
@@ -60,7 +60,7 @@ createApp({
   },
   template: `
     <div class="max-w-3xl mx-auto text-center">
-      <div class="deck" :class="{ bajar: animacion }"></div>
+      <div class="deck" :class="{ bajar: animacion, mezclar: barajando }"></div>
       <h1 class="text-2xl font-bold mb-4">Mesa</h1>
       <p class="mb-4">Cartas restantes: {{ juego.baraja.length }}</p>
       <button @click="barajear" class="px-3 py-1 mb-4 bg-yellow-600 text-white rounded">Barajear</button>
