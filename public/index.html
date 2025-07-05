@@ -12,7 +12,7 @@
     <h1 class="text-2xl font-bold mb-4">Iniciar partida</h1>
     <form @submit.prevent="start">
       <label class="block mb-2">Número de jugadores:
-        <input type="number" v-model.number="players" min="1" max="8" class="border p-1">
+        <input type="number" v-model.number="players" min="1" max="8" class="border p-1 bg-white text-black">
       </label>
       <button class="mt-2 px-3 py-1 bg-blue-500 text-white">Iniciar</button>
     </form>

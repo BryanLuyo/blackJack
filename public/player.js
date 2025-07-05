@@ -63,7 +63,7 @@ createApp({
       <div v-if="!player.name">
         <form @submit.prevent="join" class="mb-4">
           <label class="block mb-2">Nombre:
-            <input v-model="name" class="border p-1" required>
+            <input v-model="name" class="border p-1 bg-white text-black" required>
           </label>
           <button class="px-3 py-1 bg-blue-500 text-white">Unirse</button>
         </form>
