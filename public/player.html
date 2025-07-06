@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jugador de BlackJack</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-4 bg-green-800 min-h-screen text-white">
+  <div id="app" class="max-w-md mx-auto mt-6 bg-green-900 bg-opacity-50 p-4 rounded shadow">Cargando...</div>
+  <style>
+    .card {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 6rem;
+      margin-right: 0.5rem;
+      background: white;
+      border: 2px solid #444;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    }
+  </style>
+  <script src="game.js"></script>
+  <script src="player.js"></script>
+</body>
+</html>
