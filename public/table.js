@@ -5,7 +5,8 @@ function obtenerTablero() {
   return parseInt(p.get('board') || '0', 10);
 }
 
-const ws = new WebSocket(`ws://${location.host}`);
+const wsProtocol = location.protocol === 'https:' ? 'wss' : 'ws';
+const ws = new WebSocket(`${wsProtocol}://${location.host}`);
 
 createApp({
   data() {

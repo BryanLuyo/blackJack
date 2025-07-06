@@ -20,6 +20,8 @@ npm start     # iniciar el servidor Node.js
 ```
 
 Con el servidor en marcha, abre `http://localhost:3000` en tu navegador.
+Si accedes mediante HTTPS (por ejemplo usando un túnel), el cliente se conectará
+automáticamente por **WSS** al mismo host.
 
 ## Despliegue en Railway
 
