@@ -161,7 +161,7 @@ function procesarMensaje(ws, msg) {
   difundir();
 }
 
-const PUERTO = process.env.PORT || 3000;
+const PUERTO = process.env.PORT || 8080;
 servidor.listen(PUERTO, () => {
   console.log(`Server running at http://localhost:${PUERTO}`);
 });
