@@ -20,3 +20,16 @@ npm start     # iniciar el servidor Node.js
 ```
 
 Con el servidor en marcha, abre `http://localhost:3000` en tu navegador.
+
+## Despliegue en Railway
+
+Este proyecto puede desplegarse fácilmente en [Railway](https://railway.app).
+El repositorio incluye un archivo `railway.json` que indica el comando de inicio
+(`node server.js`). Al crear un nuevo proyecto en Railway y vincular este
+repositorio, la plataforma instalará las dependencias y ejecutará
+automáticamente `npm start`.
+
+No se requiere paso de compilación, por lo que la configuración por defecto de
+Railway es suficiente. Asegúrate de que la variable de entorno `PORT` esté
+disponible (Railway la define de manera automática) y el servidor escuchará en
+ese puerto.
